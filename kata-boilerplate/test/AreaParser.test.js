@@ -10,7 +10,8 @@ describe("Area parser", () => {
         expect(Array.isArray(areaParser.parse(area))).toBe(true);
     });
 
-    test("it should return multidimensional array", () => {
-        expect(Array.isArray(areaParser.parse(area))).toBe(true);
+    test("it should return multidimensional array with specific length", () => {
+        const parsedArea = areaParser.parse(area);
+        expect(parsedArea.flat().length).toBe(32);
     });
 });
