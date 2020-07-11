@@ -1,10 +1,9 @@
 class AreaParser {
     parse(area) {
-        return this.splitToRows(area)
-    }
-
-    splitToRows(area) {
-        return area.replace(/\r/g, "").split(/\n/);
+        const parsedArea = area.replace(/\r/g, "").split(/\n/);
+        parsedArea.shift();
+        const moreParsed = parsedArea.map(row => row.split(''));
+        return moreParsed;
     }
 }
 
