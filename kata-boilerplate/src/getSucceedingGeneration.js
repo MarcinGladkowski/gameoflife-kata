@@ -4,8 +4,8 @@ const AreaParser = require('../src/AreaValidator.js')
 
 function getSucceedingGeneration(initialGenerationConfig, evolveByNGenerations = 1)
 {   
-    const game = new Game(new AreaParser(), new AreaValidator())
-    return game.nextGeneration(initialGenerationConfig)
+    const game = new Game(new AreaParser(), new AreaValidator(), initialGenerationConfig)
+    return game.nextGeneration()
 }
 
 module.exports = getSucceedingGeneration;
