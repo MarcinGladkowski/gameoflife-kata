@@ -11,13 +11,11 @@ class Game {
         this.areaParser = areaParser;
         this.areaValidator = areaValidator;
         this.steps = [];
-
         this.init(initArea)
     }
 
     init(initArea) {
         const parsedArea = this.areaParser.parse(initArea);
-
         if(!AreaValidator.valid(initArea, parsedArea)) {
             throw Error('Initial area is invalid!');
         }
@@ -25,16 +23,29 @@ class Game {
         this.steps.push(parsedArea)
     }
 
+    evolveByNGenerations(n = 1) {
+        for(let i = n; i <= n; i++) {
+            this.nextGeneration()
+        }
+    }
+
     nextGeneration() {
         const previousStep = this.steps[this.steps.length - 1];
-        const nextStep = [...previousStep];
+
+        let nextStep = this.deepCopy(previousStep)
+
         for(let x = 0; x < previousStep.length; x++) {
             for(let y = 0; y < previousStep[x].length; y++) {
                 nextStep[x][y] = this.decide(this.getCellNeighbors(x, y, previousStep), previousStep[x][y])
             }
         }
-        this.steps.push(nextStep)
-        return nextStep;
+        this.steps.push(nextStep);
+
+        return this;
+    }
+
+    deepCopy(object) {
+        return JSON.parse(JSON.stringify(object));
     }
 
     /**
@@ -48,8 +59,11 @@ class Game {
         return output.trim();
     }
 
-    getCellNeighbors(x, y, area) {
- 
+    getCellNeighbors(x, y, passedArea) {
+
+        let area = [...passedArea]
+
+
         const neighbors = []
         if (isUndefined(area[x-1])) {
             if (isUndefined(area[x-1][y-1])) neighbors.push(area[x-1][y-1])
@@ -113,6 +127,10 @@ class Game {
 
     steps() {
         return this.steps;
+    }
+
+    step(index) {
+        return this.steps[index];
     }
 } 
 
