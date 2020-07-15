@@ -109,14 +109,6 @@ class Game {
         return cell;
     }
     
-      /**
-     * @param {array} neighbors 
-
-     */
-    getDeadNeighbors(neighbors) {
-        return neighbors.filter((neighbor) => neighbor === CellType.DEAD).length
-    }
-
      /**
      * @param {array} neighbors 
      */
