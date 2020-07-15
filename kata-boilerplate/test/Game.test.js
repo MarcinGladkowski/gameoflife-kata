@@ -13,70 +13,55 @@ describe("Game", () => {
         [ '.', '.', '.', '.', '.', '.', '.', '.' ] 
     ]
 
-    test("it should return initial step", () => {
-        const initialArea = fs.readFileSync(__dirname + '/examples/example01-input.txt', 'utf8')
-        const game = new Game(new AreaParser(), new AreaValidator(), initialArea);
-        expect(game.steps.length).toBe(1);
-    });
+    const initialArea = fs.readFileSync(__dirname + '/examples/example01-input.txt', 'utf8')
+    const game = new Game(new AreaParser(), new AreaValidator(), initialArea);
 
     test("it should return initial step", () => {
-        const initialArea = fs.readFileSync(__dirname + '/examples/example01-input.txt', 'utf8')
-        const game = new Game(new AreaParser(), new AreaValidator(), initialArea);
         expect(game.steps.length).toBe(1);
     });
 
     test('test should return neighbors for cell', () => {
-        const initialArea = fs.readFileSync(__dirname + '/examples/example01-input.txt', 'utf8')
-        const game = new Game(new AreaParser(), new AreaValidator(), initialArea);
         expect(game.getCellNeighbors(0, 0, parsedArea)).toEqual(['.','.','.'])
     });
 
-
-    test('test should return dead neighbors cell', () => {
-        const initialArea = fs.readFileSync(__dirname + '/examples/example01-input.txt', 'utf8')
-        const game = new Game(new AreaParser(), new AreaValidator(), initialArea);
-        expect(game.getDeadNeighbors(['.','.','.'])).toEqual(3);
-    });
-
     test('test should return live neighbors cell', () => {
-        const initialArea = fs.readFileSync(__dirname + '/examples/example01-input.txt', 'utf8')
-        const game = new Game(new AreaParser(), new AreaValidator(), initialArea);
         expect(game.getLiveNeighbors(['.','*','*'])).toEqual(2);
     });
 
 
     test('test should dead by overcrowd', () => {
-        const initialArea = fs.readFileSync(__dirname + '/examples/example01-input.txt', 'utf8')
-        const game = new Game(new AreaParser(), new AreaValidator(), initialArea);
         expect(game.decide([CellType.LIVE, CellType.LIVE, CellType.LIVE, CellType.LIVE], CellType.LIVE)).toEqual(CellType.DEAD);
     });
 
     test('test should dead by underpopulation', () => {
-        const initialArea = fs.readFileSync(__dirname + '/examples/example01-input.txt', 'utf8')
-        const game = new Game(new AreaParser(), new AreaValidator(), initialArea);
         expect(game.decide([CellType.LIVE], CellType.LIVE)).toEqual(CellType.DEAD);
     });
 
     test('test should live to next generation', () => {
-        const initialArea = fs.readFileSync(__dirname + '/examples/example01-input.txt', 'utf8')
-        const game = new Game(new AreaParser(), new AreaValidator(), initialArea);
         expect(game.decide([CellType.LIVE, CellType.LIVE], CellType.LIVE)).toEqual(CellType.LIVE);
         expect(game.decide([CellType.LIVE, CellType.LIVE, CellType.LIVE], CellType.LIVE)).toEqual(CellType.LIVE);
     });
 
     test('test should become cell live from dead', () => {
-        const initialArea = fs.readFileSync(__dirname + '/examples/example01-input.txt', 'utf8')
-        const game = new Game(new AreaParser(), new AreaValidator(), initialArea);
         expect(game.decide([CellType.LIVE, CellType.LIVE, CellType.LIVE], CellType.DEAD)).toEqual(CellType.LIVE);
     });
 
-    test('test should create next generation', () => {
-        const initialArea = fs.readFileSync(__dirname + '/examples/example01-input.txt', 'utf8')
-        const game = new Game(new AreaParser(), new AreaValidator(), initialArea);
-        const newGeneration = game.nextGeneration()
-        const consoleOutputFormat = game.consoleOutputFormat(newGeneration);
+    test('test should create next generation from custom form on start', () => {
+        game.evolveByNGenerations()
+        const consoleOutputFormat = game.consoleOutputFormat(game.step(1));
         const areaNextGenerationOutput = fs.readFileSync(__dirname + '/examples/example01-output.txt', 'utf8')
+        expect(consoleOutputFormat).toBe(areaNextGenerationOutput);
+    });
 
+
+    test('test should create next generation from glider on start', () => {
+        const initialArea = fs.readFileSync(__dirname + '/examples/example02-input.txt', 'utf8');
+        const areaNextGenerationOutput = fs.readFileSync(__dirname + '/examples/example02-output.txt', 'utf8');
+
+        const game = new Game(new AreaParser(), new AreaValidator(), initialArea);
+        game.evolveByNGenerations()
+        const consoleOutputFormat = game.consoleOutputFormat(game.step(1));
+        
         expect(consoleOutputFormat).toBe(areaNextGenerationOutput);
     });
 });
