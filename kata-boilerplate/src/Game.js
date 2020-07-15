@@ -94,8 +94,7 @@ class Game {
      */
     decide(neighbors, cell) {
         const liveCells = this.getLiveNeighbors(neighbors)
-        
-        // pass to rules module as callbacks/functions
+
         if (cell === CellType.LIVE && (liveCells < 2 || liveCells > 3)) {
             return CellType.DEAD;
         }
