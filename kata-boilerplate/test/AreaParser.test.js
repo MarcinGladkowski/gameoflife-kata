@@ -12,6 +12,6 @@ describe("Area parser", () => {
 
     test("it should return multidimensional array with specific length", () => {
         const parsedArea = areaParser.parse(area);
-        expect(parsedArea.flat().length).toBe(32);
+        expect(parsedArea.flat(Infinity).length).toBe(32);
     });
 });
